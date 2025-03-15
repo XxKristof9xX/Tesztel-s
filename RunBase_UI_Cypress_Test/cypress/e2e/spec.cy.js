@@ -111,6 +111,20 @@ describe('Regisztráció rövid felhasználónévvel', () => {
   })
 });
 
+describe('Regisztráció helyes hosszúságú adatokkal', () => {
+  it('passes', () => {
+    cy.visit('/')
+    const username = 'TesztElek';
+    const password = 'TitkosJelszo123';
+    cy.get('.navbar').contains('Bejelentkezés').click();
+    cy.get('form').contains('Regisztráljon itt').click();
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
+    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.alert').contains('Sikeres regisztráció');
+  })
+});
+
 
 
 
