@@ -83,6 +83,22 @@ describe('Szervező profillal Admin Panel elérhetősége, de csak a versenyzők
   });
 });
 
+describe('Regisztráció rövid jelszóval', () => {
+  it('passes', () => {
+    cy.visit('/')
+    const username = 'TesztElek';
+    const password = '123';
+    cy.get('.navbar').contains('Bejelentkezés').click();
+    cy.get('form').contains('Regisztráljon itt').click();
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
+    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.alert').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
+  })
+});
+
+
+
 
 
 
