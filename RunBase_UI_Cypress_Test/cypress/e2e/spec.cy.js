@@ -140,6 +140,19 @@ describe('Regisztráció már létező felhasználónévvel', () => {
   });
 });
 
+describe('Admin profillal létező felhasználó törlése', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'Teszt Felhasználó';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Admin Panel').click();
+    cy.get('#input-0').type('TesztElek');
+    cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > :nth-child(4) > .bg-error').click();
+    cy.get('.v-data-table-rows-no-data > td').contains('No data available');
+    cy.get('.navbar').contains('Kijelentkezés').click();
+  });
+});
+
 
 
 
