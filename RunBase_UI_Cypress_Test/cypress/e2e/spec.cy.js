@@ -97,7 +97,19 @@ describe('Regisztráció rövid jelszóval', () => {
   })
 });
 
-
+describe('Regisztráció rövid felhasználónévvel', () => {
+  it('passes', () => {
+    cy.visit('/')
+    const username = 'Tesz';
+    const password = '12345678';
+    cy.get('.navbar').contains('Bejelentkezés').click();
+    cy.get('form').contains('Regisztráljon itt').click();
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
+    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.alert').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
+  })
+});
 
 
 
