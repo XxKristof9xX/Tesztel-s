@@ -24,7 +24,7 @@ describe('Eredmények oldalon kiválasztott eredmények megjelennek lista kivál
   })
 });
 
-describe('Bejelentkezésellenőrzése ', () => {
+describe('Bejelentkezés ellenőrzése ', () => {
   it('Logs in using cy.loginAs', () => {
     const username = 'Teszt Felhasználó3';
     cy.visit('/');
@@ -57,7 +57,7 @@ describe('Admin profilon Admin Panel elérhetősége ', () => {
   });
 });
 
-describe('Admin profilon Admin Panel elérhetősége ', () => {
+describe('Admin profillal Admin Panel elérhetősége ', () => {
   it('Logs in using cy.loginAs', () => {
     const username = 'Teszt Felhasználó';
     cy.visit('/');
@@ -67,6 +67,19 @@ describe('Admin profilon Admin Panel elérhetősége ', () => {
     cy.get('.navbar').contains('Admin Panel').click();
     cy.get('.v-container').contains('Felhasználók kezelése').should('exist');
     cy.get('.v-container').contains('Versenyzők kezelése').should('exist');
+  });
+});
+
+describe('Szervező profillal Admin Panel elérhetősége, de csak a versenyzők adatai érhetők el ', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'TestOrganizer';
+    cy.visit('/');
+    cy.loginAs(username, 's');
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("organizer");
+    cy.get('.navbar').contains('Admin Panel').click();
+    cy.get('.v-container').contains('Versenyzők kezelése').should('exist');
+    cy.get('.v-container').contains('Felhasználók kezelése').should('not.exist');
   });
 });
 
