@@ -41,7 +41,7 @@ describe('Kijelentkezés ', () => {
     cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Profil').click();
     cy.get('.card-title').contains(username);
-    cy.get('.container').contains('Kijelentkezés').click();
+    cy.get('.navbar').contains('Kijelentkezés').click();
     cy.get('body').should('not.contain', 'Profil');
   });
 });
@@ -54,6 +54,7 @@ describe('Admin profilon Admin Panel elérhetősége ', () => {
     cy.get('.navbar').contains('Profil').click();
     cy.get('.card-body').contains("admin");
     cy.get('.navbar').contains('Admin Panel').should('exist');
+    cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
 
@@ -67,6 +68,7 @@ describe('Admin profillal Admin Panel elérhetősége ', () => {
     cy.get('.navbar').contains('Admin Panel').click();
     cy.get('.v-container').contains('Felhasználók kezelése').should('exist');
     cy.get('.v-container').contains('Versenyzők kezelése').should('exist');
+    cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
 
@@ -80,6 +82,7 @@ describe('Szervező profillal Admin Panel elérhetősége, de csak a versenyzők
     cy.get('.navbar').contains('Admin Panel').click();
     cy.get('.v-container').contains('Versenyzők kezelése').should('exist');
     cy.get('.v-container').contains('Felhasználók kezelése').should('not.exist');
+    cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
 
@@ -123,6 +126,18 @@ describe('Regisztráció helyes hosszúságú adatokkal', () => {
     cy.get('.btn-primary').contains('Regisztráció').click();
     cy.get('.alert').contains('Sikeres regisztráció');
   })
+});
+
+describe('Regisztráció már létező felhasználónévvel', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'TesztElek';
+    const password = 'TitkosJelszo123';
+    cy.visit('/');
+    cy.loginAs(username, password);
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("user");
+    cy.get('.navbar').contains('Kijelentkezés').click();
+  });
 });
 
 
