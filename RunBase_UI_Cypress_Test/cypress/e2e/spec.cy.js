@@ -156,13 +156,30 @@ describe('Felhasználóhoz versenyző rendelése TAJ szám megadásával', () =>
   });
 });
 
+describe('Admin profillal létező felhasználó nevének módosítása', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'Teszt Felhasználó';
+    const password = 'TitkosJelszo123';
+    cy.visit('/');
+    cy.loginAs(username, password);
+    cy.get('.navbar').contains('Admin Panel').click();
+    cy.get('#input-0').type('TesztElek');
+    cy.get('.v-container > :nth-child(1) > :nth-child(2)').contains('Módosítás').click();
+    cy.get('.v-card-text input').eq(0).type('11');
+    cy.get('.v-card-actions > :nth-child(3)').contains('Mentés').click();
+    cy.get('#input-0').clear().type('TesztElek11');
+    cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > :nth-child(2)').contains('TesztElek11');
+    cy.get('.navbar').contains('Kijelentkezés').click();
+  });
+});
+
 describe('Admin profillal létező felhasználó törlése', () => {
   it('Logs in using cy.loginAs', () => {
     const username = 'Teszt Felhasználó';
     cy.visit('/');
     cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Admin Panel').click();
-    cy.get('#input-0').type('TesztElek');
+    cy.get('#input-0').type('TesztElek11');
     cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > :nth-child(4) > .bg-error').click();
     cy.get('.v-data-table-rows-no-data > td').contains('No data available');
     cy.get('.navbar').contains('Kijelentkezés').click();
