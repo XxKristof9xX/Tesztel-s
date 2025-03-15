@@ -168,6 +168,7 @@ describe('Felhasználóhoz adott versenyző adatainak ellenőrzése', () => {
     cy.get('.btn-primary').contains('Leírás').click();
     cy.get('.modal-header').contains('Barna Tamás');
     cy.get('.modal-body').contains('13:03:08');
+    cy.visit('/');
     cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
