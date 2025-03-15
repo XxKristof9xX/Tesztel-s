@@ -128,7 +128,7 @@ describe('Regisztráció helyes hosszúságú adatokkal', () => {
   })
 });
 
-describe('Regisztráció már létező felhasználónévvel', () => {
+describe('Bejelentkezés már létező felhasználónévvel', () => {
   it('Logs in using cy.loginAs', () => {
     const username = 'TesztElek';
     const password = 'TitkosJelszo123';
@@ -136,6 +136,22 @@ describe('Regisztráció már létező felhasználónévvel', () => {
     cy.loginAs(username, password);
     cy.get('.navbar').contains('Profil').click();
     cy.get('.card-body').contains("user");
+    cy.get('.navbar').contains('Kijelentkezés').click();
+  });
+});
+
+describe('Felhasználóhoz versenyző rendelése TAJ szám megadásával', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'TesztElek';
+    const password = 'TitkosJelszo123';
+    cy.visit('/');
+    cy.loginAs(username, password);
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("user");
+    cy.get('.card-body').contains('Nincs hozzárendelve');
+    cy.get('.form-control').type('955401173');
+    cy.get('.container > :nth-child(2) > :nth-child(2) > .btn').contains('Azonosítás').click();
+    cy.get('.card-body > :nth-child(3)').contains('9');
     cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
