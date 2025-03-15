@@ -26,23 +26,37 @@ describe('Eredmények oldalon kiválasztott eredmények megjelennek lista kivál
 
 describe('Bejelentkezésellenőrzése ', () => {
   it('Logs in using cy.loginAs', () => {
-    const username = 'Teszt Felhasználó';
+    const username = 'Teszt Felhasználó3';
     cy.visit('/');
     cy.loginAs(username, 'TitkosJelszo123');
-    cy.get(':nth-child(3) > a.nav-item').contains('Profil').click();
+    cy.get('.navbar').contains('Profil').click();
     cy.get('.card-title').contains(username);
   });
 });
 
 describe('Kijelentkezés ', () => {
   it('Logs in using cy.loginAs', () => {
-    const username = 'Teszt Felhasználó';
+    const username = 'Teszt Felhasználó3';
     cy.visit('/');
     cy.loginAs(username, 'TitkosJelszo123');
-    cy.get(':nth-child(3) > a.nav-item').contains('Profil').click();
+    cy.get('.navbar').contains('Profil').click();
     cy.get('.card-title').contains(username);
-    cy.get(':nth-child(3) > .btn').contains('Kijelentkezés').click();
+    cy.get('.container').contains('Kijelentkezés').click();
     cy.get('body').should('not.contain', 'Profil');
   });
 });
+
+describe('Admin profilon Admin Panel elérhetősége ', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'Teszt Felhasználó';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("admin");
+    cy.get('.navbar').contains('Admin Panel').should('exist');
+  });
+});
+
+
+
 
