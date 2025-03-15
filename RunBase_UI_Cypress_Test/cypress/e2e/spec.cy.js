@@ -57,6 +57,19 @@ describe('Admin profilon Admin Panel elérhetősége ', () => {
   });
 });
 
+describe('Admin profilon Admin Panel elérhetősége ', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'Teszt Felhasználó';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("admin");
+    cy.get('.navbar').contains('Admin Panel').click();
+    cy.get('.v-container').contains('Felhasználók kezelése').should('exist');
+    cy.get('.v-container').contains('Versenyzők kezelése').should('exist');
+  });
+});
+
 
 
 
