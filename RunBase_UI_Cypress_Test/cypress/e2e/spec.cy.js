@@ -74,9 +74,9 @@ describe('Admin profillal Admin Panel elérhetősége ', () => {
 
 describe('Szervező profillal Admin Panel elérhetősége, de csak a versenyzők adatai érhetők el ', () => {
   it('Logs in using cy.loginAs', () => {
-    const username = 'TestOrganizer';
+    const username = 'Teszt Felhasználó2';
     cy.visit('/');
-    cy.loginAs(username, 's');
+    cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Profil').click();
     cy.get('.card-body').contains("organizer");
     cy.get('.navbar').contains('Admin Panel').click();
@@ -163,7 +163,7 @@ describe('Felhasználóhoz adott versenyző adatainak ellenőrzése', () => {
     cy.visit('/');
     cy.loginAs(username, password);
     cy.get('.navbar').contains('Profil').click();
-    cy.get('.card-body').contains("user");
+    cy.get('.card-body').contains("competitor");
     cy.get('.card-body > :nth-child(3)').contains('9');
     cy.get('.btn-primary').contains('Leírás').click();
     cy.get('.modal-header').contains('Barna Tamás');
