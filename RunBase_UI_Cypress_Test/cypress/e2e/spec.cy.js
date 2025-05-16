@@ -2,16 +2,28 @@ describe('Versenyek megjelennek a versenyek oldalon', () => {
   it('passes', () => {
     cy.visit('/')
     cy.get('[href="/versenyek"]').click();
-    cy.get('.card').should('exist');
+    cy.wait(5000);
+    cy.get(':nth-child(1) > .v-card > .v-card-title').should('exist');
   })
 
 });
 
-describe('Eredmények oldalon versenyek listázhatók', () => {
+describe('Eredmények oldal nem elérhető bejelentkezés nélkül', () => {
   it('passes', () => {
     cy.visit('/')
     cy.get('[href="/eredmenyek"]').click();
-    cy.get('#selectedCompetition').should('not.be.empty');
+    cy.url().should('include', '/login');
+  })
+});
+
+describe('Eredmények oldal elérhető bejelentkezés után', () => {
+  it('passes', () => {
+    const username = 'Teszt Felhasználó3';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Eredmények').click()
+    cy.get('.my-3').contains('Eredmények');
+    cy.get('.navbar').contains('Kijelentkezés').click();
   })
 });
 
@@ -19,6 +31,7 @@ describe('Eredmények oldalon kiválasztott eredmények megjelennek lista kivál
   it('passes', () => {
     cy.visit('/')
     cy.get('[href="/eredmenyek"]').click();
+    cy.get(':nth-child(1) > .v-input > .v-input__control > .v-field > .v-field__append-inner > .mdi-menu-down').click();
     cy.get('#selectedCompetition').select("27. ALDI Női Futógála");
     cy.get('.table > :nth-child(2) > :nth-child(1)').should('have.text', '5');
   })
@@ -74,9 +87,9 @@ describe('Admin profillal Admin Panel elérhetősége ', () => {
 
 describe('Szervező profillal Admin Panel elérhetősége, de csak a versenyzők adatai érhetők el ', () => {
   it('Logs in using cy.loginAs', () => {
-    const username = 'TestOrganizer';
+    const username = 'Teszt Felhasználó2';
     cy.visit('/');
-    cy.loginAs(username, 's');
+    cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Profil').click();
     cy.get('.card-body').contains("organizer");
     cy.get('.navbar').contains('Admin Panel').click();
@@ -92,10 +105,10 @@ describe('Regisztráció rövid jelszóval', () => {
     const username = 'TesztElek';
     const password = '123';
     cy.get('.navbar').contains('Bejelentkezés').click();
-    cy.get('form').contains('Regisztráljon itt').click();
-    cy.get('#username').type(username);
-    cy.get('#password').type(password);
-    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.bg-secondary').contains('Regisztráció').click();
+    cy.get('#input-6').type(username);
+    cy.get('#input-8').type(password);
+    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.alert').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
   })
 });
@@ -106,10 +119,10 @@ describe('Regisztráció rövid felhasználónévvel', () => {
     const username = 'Tesz';
     const password = '12345678';
     cy.get('.navbar').contains('Bejelentkezés').click();
-    cy.get('form').contains('Regisztráljon itt').click();
-    cy.get('#username').type(username);
-    cy.get('#password').type(password);
-    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.bg-secondary').contains('Regisztráció').click();
+    cy.get('#input-6').type(username);
+    cy.get('#input-8').type(password);
+    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.alert').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
   })
 });
@@ -120,10 +133,10 @@ describe('Regisztráció helyes hosszúságú adatokkal', () => {
     const username = 'TesztElek';
     const password = 'TitkosJelszo123';
     cy.get('.navbar').contains('Bejelentkezés').click();
-    cy.get('form').contains('Regisztráljon itt').click();
-    cy.get('#username').type(username);
-    cy.get('#password').type(password);
-    cy.get('.btn-primary').contains('Regisztráció').click();
+    cy.get('.bg-secondary').contains('Regisztráció').click();
+    cy.get('#input-6').type(username);
+    cy.get('#input-8').type(password);
+    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.alert').contains('Sikeres regisztráció');
   })
 });
