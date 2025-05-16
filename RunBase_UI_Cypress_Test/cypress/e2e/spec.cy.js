@@ -2,7 +2,7 @@ describe('Versenyek megjelennek a versenyek oldalon', () => {
   it('passes', () => {
     cy.visit('/')
     cy.get('[href="/versenyek"]').click();
-    cy.wait(5000);
+    cy.wait(2000);
     cy.get(':nth-child(1) > .v-card > .v-card-title').should('exist');
   })
 
@@ -17,24 +17,44 @@ describe('Eredmények oldal nem elérhető bejelentkezés nélkül', () => {
 });
 
 describe('Eredmények oldal elérhető bejelentkezés után', () => {
-  it('passes', () => {
+  it('Logs in using cy.loginAs', () => {
     const username = 'Teszt Felhasználó3';
     cy.visit('/');
     cy.loginAs(username, 'TitkosJelszo123');
-    cy.get('.navbar').contains('Eredmények').click()
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.navbar').contains('Eredmények').should('be.visible').click();
+    cy.url().should('include', '/eredmenyek');
     cy.get('.my-3').contains('Eredmények');
-    cy.get('.navbar').contains('Kijelentkezés').click();
-  })
+  });
 });
 
 describe('Eredmények oldalon kiválasztott eredmények megjelennek lista kiválasztása után', () => {
   it('passes', () => {
-    cy.visit('/')
-    cy.get('[href="/eredmenyek"]').click();
-    cy.get(':nth-child(1) > .v-input > .v-input__control > .v-field > .v-field__append-inner > .mdi-menu-down').click();
-    cy.get('#selectedCompetition').select("27. ALDI Női Futógála");
-    cy.get('.table > :nth-child(2) > :nth-child(1)').should('have.text', '5');
-  })
+    const username = 'Teszt Felhasználó3';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.navbar').contains('Eredmények').should('be.visible').click();
+    cy.get('.v-autocomplete').first().click();
+    cy.wait(1000);
+    cy.get('.v-list-item__content').contains('27. ALDI Női Futógála').should('exist');
+  });
+});
+
+describe('Eredmények oldalon verseny és táv kiválasztása után megjelennek az adatok és a gráf', () => {
+  it('passes', () => {
+    const username = 'Teszt Felhasználó3';
+    cy.visit('/');
+    cy.loginAs(username, 'TitkosJelszo123');
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.navbar').contains('Eredmények').should('be.visible').click();
+    cy.get('.v-autocomplete').first().click();
+    cy.wait(1000);
+    cy.get('.v-list-item__content').contains('27. ALDI Női Futógála').click();
+    cy.get('.v-autocomplete').eq(1).click();
+    cy.get('.v-list-item__content').contains('5 km').click();
+    cy.get('#myChart').should('exist');
+  });
 });
 
 describe('Bejelentkezés ellenőrzése ', () => {
@@ -105,19 +125,11 @@ describe('Regisztráció rövid jelszóval', () => {
     const username = 'TesztElek';
     const password = '123';
     cy.get('.navbar').contains('Bejelentkezés').click();
-<<<<<<< HEAD
     cy.get('.bg-secondary').contains('Regisztráció').click();
     cy.get('#input-6').type(username);
     cy.get('#input-8').type(password);
     cy.get('.bg-primary').contains('Regisztráció').click();
-    cy.get('.alert').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
-=======
-    cy.get('form').contains('Regisztráció').click();
-    cy.get('#input-6').type(username);
-    cy.get('#input-8').type(password);
-    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.v-alert').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
->>>>>>> 10f9b4e457f823a8c3ebaed999844bf37926e7b9
   })
 });
 
@@ -127,19 +139,11 @@ describe('Regisztráció rövid felhasználónévvel', () => {
     const username = 'Tesz';
     const password = '12345678';
     cy.get('.navbar').contains('Bejelentkezés').click();
-<<<<<<< HEAD
     cy.get('.bg-secondary').contains('Regisztráció').click();
     cy.get('#input-6').type(username);
     cy.get('#input-8').type(password);
     cy.get('.bg-primary').contains('Regisztráció').click();
-    cy.get('.alert').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
-=======
-    cy.get('form').contains('Regisztráció').click();
-    cy.get('#input-6').type(username);
-    cy.get('#input-8').type(password);
-    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.v-alert').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
->>>>>>> 10f9b4e457f823a8c3ebaed999844bf37926e7b9
   })
 });
 
@@ -149,19 +153,11 @@ describe('Regisztráció helyes hosszúságú adatokkal', () => {
     const username = 'TesztElek';
     const password = 'TitkosJelszo123';
     cy.get('.navbar').contains('Bejelentkezés').click();
-<<<<<<< HEAD
     cy.get('.bg-secondary').contains('Regisztráció').click();
     cy.get('#input-6').type(username);
     cy.get('#input-8').type(password);
     cy.get('.bg-primary').contains('Regisztráció').click();
-    cy.get('.alert').contains('Sikeres regisztráció');
-=======
-    cy.get('form').contains('Regisztráció').click();
-    cy.get('#input-6').type(username);
-    cy.get('#input-8').type(password);
-    cy.get('.bg-primary').contains('Regisztráció').click();
     cy.get('.v-alert').contains('Sikeres regisztráció');
->>>>>>> 10f9b4e457f823a8c3ebaed999844bf37926e7b9
   })
 });
 
@@ -187,7 +183,7 @@ describe('Felhasználóhoz versenyző rendelése TAJ szám megadásával', () =>
     cy.get('.card-body').contains("user");
     cy.get('.card-body').contains('Nincs hozzárendelve');
     cy.get('.form-control').type('955401173');
-    cy.get('.container > :nth-child(2) > :nth-child(2) > .btn').contains('Azonosítás').click();
+    cy.get(':nth-child(2) > :nth-child(2) > :nth-child(2) > .btn').contains('Azonosítás').click();
     cy.get('.card-body > :nth-child(3)').contains('9');
     cy.get('.navbar').contains('Kijelentkezés').click();
   });
@@ -234,7 +230,7 @@ describe('Admin profillal létező felhasználó törlése', () => {
     cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Admin Panel').click();
     cy.get('#input-6').type('TesztElek11');
-    cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > :nth-child(4) > .bg-error').click();
+    cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > .d-flex').contains("Törlés").click();
     cy.get('.v-data-table-rows-no-data > td').contains('No data available');
     cy.get('.navbar').contains('Kijelentkezés').click();
   });
