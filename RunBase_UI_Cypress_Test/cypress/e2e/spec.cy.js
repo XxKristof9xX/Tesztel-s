@@ -2,7 +2,7 @@ describe('Versenyek megjelennek a versenyek oldalon', () => {
   it('passes', () => {
     cy.visit('/')
     cy.get('[href="/versenyek"]').click();
-    cy.wait(2000);
+    cy.wait(3000);
     cy.get(':nth-child(1) > .v-card > .v-card-title').should('exist');
   })
 
@@ -223,19 +223,65 @@ describe('Admin profillal létező felhasználó nevének módosítása', () => 
   });
 });
 
+
+
+describe('Regisztráció helyes adatokkal és helyes versenyző adatokkal', () => {
+  it('passes', () => {
+    cy.visit('/')
+    const username = 'TesztBéla';
+    const password = 'TitkosJelszo123';
+    cy.get('.navbar').contains('Bejelentkezés').click();
+    cy.get('.bg-secondary').contains('Regisztráció').click();
+    cy.get('#input-6').type(username);
+    cy.get('#input-8').type(password);
+    cy.get('.v-selection-control').click();
+
+    cy.contains('.v-label', 'Név').parents('.v-input').find('input').type("Futó Béla");
+    cy.contains('.v-label', 'Születési év').parents('.v-input').find('input').type("1989");
+    cy.contains('.v-label', 'Neme').parents('.v-select').click();
+    cy.get('.v-list-item__content').contains('Férfi').click();
+    cy.contains('.v-label', 'TAJ szám').parents('.v-input').find('input').type("987654321");
+    cy.get('.bg-primary').contains('Regisztráció').click();
+    cy.get('.v-alert').contains('Sikeres regisztráció');
+  })
+});
+
+describe('Jelentkezés versenyre regisztrált versenyzővel', () => {
+  it('Logs in using cy.loginAs', () => {
+    const username = 'TesztBéla';
+    const password = 'TitkosJelszo123';
+    cy.visit('/');
+    cy.loginAs(username, password);
+    cy.get('.navbar').contains('Profil').click();
+    cy.get('.card-body').contains("competitor");
+    cy.get('.navbar').contains('Versenyek').should('be.visible').click();
+    cy.wait(3000);
+    cy.get(':nth-child(8) > .v-card > .v-card-actions > .v-btn > .v-btn__content').click();
+    cy.contains('.v-label', 'Válassz távot').parents('.v-select').click();
+    cy.get('.v-list-item__content').contains('5').click();
+    cy.get('.v-btn').contains('Jelentkezés').click();
+    cy.wait(3000);
+    cy.get('.v-alert').contains('Sikeres jelentkezés');
+  });
+});
+
+
 describe('Admin profillal létező felhasználó törlése', () => {
   it('Logs in using cy.loginAs', () => {
     const username = 'Teszt Felhasználó';
     cy.visit('/');
     cy.loginAs(username, 'TitkosJelszo123');
     cy.get('.navbar').contains('Admin Panel').click();
-    cy.get('#input-6').type('TesztElek11');
+    cy.get('#input-6').clear().type('TesztElek11');
     cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > .d-flex').contains("Törlés").click();
     cy.get('.v-data-table-rows-no-data > td').contains('No data available');
+    cy.get('#input-6').clear().type('TesztBéla');
+    cy.get(':nth-child(2) > .v-table > .v-table__wrapper > table > tbody > tr > .d-flex').contains("Törlés").click();
+    cy.get('.v-data-table-rows-no-data > td').contains('No data available');
+    cy.get('#input-15').clear().type('Futó Béla');
+    cy.get(':nth-child(1) > .d-flex > .bg-error.v-btn--size-small').contains("Törlés").click();
     cy.get('.navbar').contains('Kijelentkezés').click();
   });
 });
-
-
 
 
