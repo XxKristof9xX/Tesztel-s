@@ -128,8 +128,8 @@ describe('Regisztráció rövid jelszóval', () => {
     cy.get('.bg-secondary').contains('Regisztráció').click();
     cy.get('#input-6').type(username);
     cy.get('#input-8').type(password);
-    cy.get('.bg-primary').contains('Regisztráció').click();
-    cy.get('.v-alert').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
+    cy.get('.v-messages__message').contains('A jelszónak legalább 8 karakter hosszúnak kell lennie!');
+    cy.get('.bg-primary').contains('Regisztráció').should('be.disabled');
   })
 });
 
@@ -142,8 +142,8 @@ describe('Regisztráció rövid felhasználónévvel', () => {
     cy.get('.bg-secondary').contains('Regisztráció').click();
     cy.get('#input-6').type(username);
     cy.get('#input-8').type(password);
-    cy.get('.bg-primary').contains('Regisztráció').click();
-    cy.get('.v-alert').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
+    cy.get('.v-messages__message').contains('A felhasználónévnek legalább 6 karakter hosszúnak kell lennie!');
+    cy.get('.bg-primary').contains('Regisztráció').should('be.disabled');
   })
 });
 
